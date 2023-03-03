@@ -25,6 +25,7 @@ public:
     int idx;    // index 0, 1, 2, ... Ns-1
     int x, y;   // coordinates
     int Sz;     // Ising spins
+    int potts;
     int Ns;
     int L;
     // idx of its four neighbors
@@ -39,14 +40,17 @@ void set_coordinates(Site *spin, int *Ns, int *L);
 void set_nn(Site *spin, int *Ns, int *L);
 int mod_LR(int x, int m);
 int mod_UD(int x, int m);
-void Wolff_Cluster_Sim(double beta, Site *spin, int *Ns, int *L, int pick_file);
-double Wolff_Sweep(double beta, Site *spin, int *Ns, int *L);
+//void Wolff_Cluster_Sim(double beta, Site *spin, int *Ns, int *L, int pick_file);
+//double Wolff_Sweep(double beta, Site *spin, int *Ns, int *L);
 void randomize(Site *spin, int *Ns, int *L);
 double rand1();
 void clear_files();
 void print(int i, double E1, double E2, double M1, double M2, double M4, double beta, int *Ns);
 double theta(int p1, int p2);
 void init_v_clock();
+int update_site(int k, double beta, Site *spin, int *Ns, int *L);
+double MC_sweep(double beta, Site *spin, int *Ns, int *L);
+void Monte_Carlo_Sim(double beta, Site *spin, int *Ns, int *L, int pick_file);
 
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 
@@ -121,6 +125,7 @@ int main() {
     int *L;
 
     clear_files();
+    init_v_clock();
         
     for (int i = 0; i < 8; i++) {
         if (i == 0) {
@@ -173,7 +178,7 @@ int main() {
             cout << "Lattice Length = " << *L << endl;
             cout << "T = " << T << endl;
             
-            Wolff_Cluster_Sim(1./T, spin, Ns, L, i);
+            Monte_Carlo_Sim(1./T, spin, Ns, L, i);
         }
     }
     return 0;
@@ -194,6 +199,7 @@ void init_v_clock() {
 void init_chain(Site *spin, int *Ns, int *L) {
     for (int i=0; i < *Ns; i++) {
         spin[i].Sz = 1;
+        spin[i].potts = 1;
     }
 }
 
@@ -215,7 +221,7 @@ void set_coordinates(Site *spin, int *Ns, int *L) {
 void randomize(Site *spin, int *Ns, int *L) { //sets all site spins randomly to any of the q possible states
     for(int i=0; i<*Ns; i++) {
         double r = rand1();
-        spin[i].Sz = (int)(r*6);
+        spin[i].potts = (int)(r*6);
     } 
 }
 
@@ -264,8 +270,8 @@ double get_magnetization(Site *spin, int *Ns, int *L) {
     double xsum = 0, ysum = 0, sum = 0;
 
     for (int i = 0; i < *Ns; i++) {
-        xsum += cos(theta(spin[i].Sz, 0));
-        ysum += sin(theta(spin[i].Sz, 0));
+        xsum += cos(theta(spin[i].potts, 0));
+        ysum += sin(theta(spin[i].potts, 0));
     }
     xsum /= (double) *Ns;
     ysum /= (double) *Ns;
@@ -279,7 +285,7 @@ double get_energy(Site *spin, int *Ns, int *L) {
     double sum = 0;
     for(int i=0; i<*Ns; i++) {
         for(int k=0; k<N_nn1; k++) {
-            sum += V_clock[spin[i].Sz][spin[i].nn1[k]->Sz];
+            sum += V_clock[spin[i].potts][spin[i].nn1[k]->potts];
         }
     }
     return 0.5 * Jnn * sum;
@@ -292,81 +298,65 @@ double theta(int p1, int p2) {
     return theta;
 }
 
-double Wolff_Sweep(double beta, Site *spin, int *Ns, int *L) {
-    double prob = 1 - exp(2*beta*Jnn);
+//test a new state, accept or reject the state based on parameters. 
+int update_site(int k, double beta, Site *spin, int *Ns, int *L) {
+
+    int p_new = (int) (rand1() * q);
+    double delS = 0;
+    double delE = 0;
+
+    for(int l=0; l<N_nn1; l++) {
+        delS += (V_clock[p_new][spin[k].nn1[l]->potts] - V_clock[spin[k].potts][spin[k].nn1[l]->potts]);
+    }
+
+    double Hamiltonian = Jnn * delS;
+
+    //change in energy when spin is flipped (should there be a negative on spin[k].Sz?)
+    delE = -Jnn * Hamiltonian;
+
     double r = rand1();
-    double R = 0;
-    r *= *L* (*L);
 
-    if (r == 900.) r--;
-
-    Cluster C;
-    Cluster F_old;
-    Cluster F_new;
-
-    F_old.sites.clear();
-    C.sites.clear();
-    C.size = 0;
-    C.sites.push_back((int)r);
-    F_old.sites.push_back((int)r);
-
-    vector<int> in_cluster(*Ns);
-
-    in_cluster[(int)r] = 1;
-
-    while(!F_old.sites.empty()) {
-        F_new.sites.clear();
-
-        for (int i = 0; i < F_old.sites.size(); i++) {
-
-            for (int j = 0; j < N_nn1; j++) {
-
-                int k = spin[F_old.sites[i]].nn1[j]->idx;
-
-                if (spin[F_old.sites[i]].nn1[j]->Sz == spin[F_old.sites[i]].Sz && in_cluster[k] == 0) {
-
-                    if (rand1() < prob) {
-
-                        F_new.sites.push_back(spin[k].idx);
-                        C.sites.push_back(spin[k].idx);
-                        in_cluster[k] = 1;
-                        C.size += 1.;
-
-                    }
-                }
-            }
+    if (delE == 0) {
+        //if there is no change in the energy, coin flip to see if accepted
+        if (r < 0.5) {
+            spin[k].potts = p_new;
+            return 1;
+        } else return 0;
+    } else {
+        if (r < exp(-delE * beta)) {
+            spin[k].potts = p_new;
+            return 1;
+        } else {
+        return 0;
         }
-            F_old.sites = F_new.sites;
     }
-    
-    //Once cluster is made, flip all the spins in cluster randomly
-    R = rand1();
-
-    for (int l = 0; l < C.sites.size(); l++) {
-
-        spin[C.sites[l]].Sz = (int) (R*6);
-    }
-
-    return C.size;
 }
 
-void Wolff_Cluster_Sim(double beta, Site *spin, int *Ns, int *L, int pick_file) {
+double MC_sweep(double beta, Site *spin, int *Ns, int *L) {
+    int hits = 0;
+    for(int i=0; i<*Ns; i++) {
+        hits += update_site(i, beta, spin, Ns, L);
+    }
+    return ((double) hits)/((double) *Ns);      // success rate
+}
 
-    int thermalize = 5000;
-    int nsweep = 20;
-    int ndata = 600000;
+void Monte_Carlo_Sim(double beta, Site *spin, int *Ns, int *L, int pick_file) {
+
+    int thermalize = 20000;
+    int nsweep = 50;
+    int ndata = 500000;
 
     //Run 5000 sweeps of the system to achieve equilibrium
-    double total_members = 0;
+    double accepted = 0;
     for (int i = 0; i < thermalize; i++) {
-        total_members += Wolff_Sweep(beta, spin, Ns, L);
+        accepted += MC_sweep(beta, spin, Ns, L);
     }
-    cout << "Average Cluster Size = " << total_members/((double) thermalize) << endl;
+    cout << "spin update rate = " << accepted/((double) thermalize) << endl;
 
     //now start to collect data
     double E1 = 0, E2 = 0;
-    double M1 = 0, M2 = 0, M4 = 0, abs_M = 0;
-    double avg_size = 0;
+    double M1 = 0, M2 = 0, M4 = 0;
+    double avg_accept = 0;
 
     int system_check = 100000;
 
@@ -374,28 +364,28 @@ void Wolff_Cluster_Sim(double beta, Site *spin, int *Ns, int *L, int pick_file) 
 
         if(n % system_check == 0) cout << "n = " << n << endl;
 
-        total_members = 0;
-
+        accepted = 0;
         for (int r = 0; r < nsweep; r++) {
-            total_members += Wolff_Sweep(beta, spin, Ns, L);
-        }
 
-        total_members /= ((double) nsweep);
-        avg_size = (n * avg_size + total_members) / (n + 1.);
+            accepted += MC_sweep(beta, spin, Ns, L);
+
+        }
+        accepted /= ((double) nsweep);
+        avg_accept = (n * avg_accept + accepted) / (n + 1.);
 
         double e = get_energy(spin, Ns, L);
+
         E1 = (n * E1 + e) / (n + 1.);
         E2 = (n * E2 + e*e) / (n + 1.);
 
         double mag = get_magnetization(spin, Ns, L);
+
         M1 = (n * M1 + mag) / (n + 1.);
         M2 = (n * M2 + pow(mag, 2)) / (n + 1.);
         M4 = (n * M4 + pow(mag, 4)) / (n + 1.);
-
     }
 
     print(pick_file, E1, E2, M1, M2, M4, beta, Ns);
-
 }
 
 double rand1() {
