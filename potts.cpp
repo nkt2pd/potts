@@ -505,7 +505,7 @@ void print(int i, double E1, double E2, double M1, double M2, double M4, double 
         energy << 1./beta << ", " << E1/((double) *Ns) << endl;
         heat << 1./beta << ", " << pow(beta, 2) * (E2 - E1*E1) / ((double) *Ns) << endl;
         m << 1./beta << ", " << M1 << endl;
-        susceptibility << 1./beta << ", " << beta*(M2 - M1*M1)/((double) *Ns) << endl;
+        susceptibility << 1./beta << ", " << beta*(M2 - M1*M1) << endl;
         binder4 << 1./beta << ", " << 1. - (M4/(3 * pow(M2, 2))) << endl;
 
         m.close();
@@ -528,8 +528,8 @@ void print(int i, double E1, double E2, double M1, double M2, double M4, double 
 
         energy << 1./beta << ", " << E1/((double) *Ns) << endl;
         heat << 1./beta << ", " << pow(beta, 2) * (E2 - E1*E1) / ((double) *Ns) << endl;
-        m << 1./beta << ", " << M1/((double) *Ns) << endl;
-        susceptibility << 1./beta << ", " << beta*(M2 - M1*M1)/((double) *Ns) << endl;
+        m << 1./beta << ", " << M1 << endl;
+        susceptibility << 1./beta << ", " << beta*(M2 - M1*M1) << endl;
         binder4 << 1./beta << ", " << 1. - (M4/(3 * pow(M2, 2))) << endl;
 
         m.close();
@@ -552,8 +552,8 @@ void print(int i, double E1, double E2, double M1, double M2, double M4, double 
 
         energy << 1./beta << ", " << E1/((double) *Ns) << endl;
         heat << 1./beta << ", " << pow(beta, 2) * (E2 - E1*E1) / ((double) *Ns) << endl;
-        m << 1./beta << ", " << M1/((double) *Ns) << endl;
-        susceptibility << 1./beta << ", " << beta*(M2 - M1*M1)/((double) *Ns) << endl;
+        m << 1./beta << ", " << M1 << endl;
+        susceptibility << 1./beta << ", " << beta*(M2 - M1*M1) << endl;
         binder4 << 1./beta << ", " << 1. - (M4/(3 * pow(M2, 2))) << endl;
 
         m.close();
@@ -576,8 +576,8 @@ void print(int i, double E1, double E2, double M1, double M2, double M4, double 
 
         energy << 1./beta << ", " << E1/((double) *Ns) << endl;
         heat << 1./beta << ", " << pow(beta, 2) * (E2 - E1*E1) / ((double) *Ns) << endl;
-        m << 1./beta << ", " << M1/((double) *Ns) << endl;
-        susceptibility << 1./beta << ", " << beta*(M2 - M1*M1)/((double) *Ns) << endl;
+        m << 1./beta << ", " << M1 << endl;
+        susceptibility << 1./beta << ", " << beta*(M2 - M1*M1) << endl;
         binder4 << 1./beta << ", " << 1. - (M4/(3 * pow(M2, 2))) << endl;
 
         m.close();
@@ -600,8 +600,8 @@ void print(int i, double E1, double E2, double M1, double M2, double M4, double 
 
         energy << 1./beta << ", " << E1/((double) *Ns) << endl;
         heat << 1./beta << ", " << pow(beta, 2) * (E2 - E1*E1) / ((double) *Ns) << endl;
-        m << 1./beta << ", " << M1/((double) *Ns) << endl;
-        susceptibility << 1./beta << ", " << beta*(M2 - M1*M1)/((double) *Ns) << endl;
+        m << 1./beta << ", " << M1 << endl;
+        susceptibility << 1./beta << ", " << beta*(M2 - M1*M1) << endl;
         binder4 << 1./beta << ", " << 1. - (M4/(3 * pow(M2, 2))) << endl;
 
         m.close();
@@ -624,8 +624,8 @@ void print(int i, double E1, double E2, double M1, double M2, double M4, double 
 
         energy << 1./beta << ", " << E1/((double) *Ns) << endl;
         heat << 1./beta << ", " << pow(beta, 2) * (E2 - E1*E1) / ((double) *Ns) << endl;
-        m << 1./beta << ", " << M1/((double) *Ns) << endl;
-        susceptibility << 1./beta << ", " << beta*(M2 - M1*M1)/((double) *Ns) << endl;
+        m << 1./beta << ", " << M1 << endl;
+        susceptibility << 1./beta << ", " << beta*(M2 - M1*M1) << endl;
         binder4 << 1./beta << ", " << 1. - (M4/(3 * pow(M2, 2))) << endl;
 
         m.close();
@@ -648,8 +648,8 @@ void print(int i, double E1, double E2, double M1, double M2, double M4, double 
 
         energy << 1./beta << ", " << E1/((double) *Ns) << endl;
         heat << 1./beta << ", " << pow(beta, 2) * (E2 - E1*E1) / ((double) *Ns) << endl;
-        m << 1./beta << ", " << M1/((double) *Ns) << endl;
-        susceptibility << 1./beta << ", " << beta*(M2 - M1*M1)/((double) *Ns) << endl;
+        m << 1./beta << ", " << M1 << endl;
+        susceptibility << 1./beta << ", " << beta*(M2 - M1*M1) << endl;
         binder4 << 1./beta << ", " << 1. - (M4/(3 * pow(M2, 2))) << endl;
 
         m.close();
@@ -672,8 +672,8 @@ void print(int i, double E1, double E2, double M1, double M2, double M4, double 
 
         energy << 1./beta << ", " << E1/((double) *Ns) << endl;
         heat << 1./beta << ", " << pow(beta, 2) * (E2 - E1*E1) / ((double) *Ns) << endl;
-        m << 1./beta << ", " << M1/((double) *Ns) << endl;
-        susceptibility << 1./beta << ", " << beta*(M2 - M1*M1)/((double) *Ns) << endl;
+        m << 1./beta << ", " << M1 << endl;
+        susceptibility << 1./beta << ", " << beta*(M2 - M1*M1) << endl;
         binder4 << 1./beta << ", " << 1. - (M4/(3 * pow(M2, 2))) << endl;
 
         m.close();
