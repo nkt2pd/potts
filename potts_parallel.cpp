@@ -102,6 +102,13 @@ int main(int argc, char *argv[]) {
         cout << "T = " << T << endl;
             
         Monte_Carlo_Sim(1./T, spin, Ns, L, L_name);
+	
+	if (T <= 1.1 && T >= 0.65) {
+	  del_T = 0.05;
+	} else {
+	  del_T = 0.1;
+	}
+
     }
 
 
