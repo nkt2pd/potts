@@ -107,27 +107,27 @@ void make_files(int *num_temps) {
 
         infile1 >> buffer;
         vals = stod(buffer);
-        streams[i] << "4, " << vals << std::endl;
+        streams[i] << "4, " << vals * 16 << std::endl;
 
         infile2 >> buffer;
         vals = stod(buffer);
-        streams[i] << "8, " << vals << std::endl;
+        streams[i] << "8, " << vals * 64 << std::endl;
 
         infile3 >> buffer;
         vals = stod(buffer);
-        streams[i] << "12, " << vals << std::endl;
+        streams[i] << "12, " << vals * 144 << std::endl;
 
         infile4 >> buffer;
         vals = stod(buffer);
-        streams[i] << "16, " << vals << std::endl;
+        streams[i] << "16, " << vals * 256 << std::endl;
 
         infile5 >> buffer;
         vals = stod(buffer);
-        streams[i] << "20, " << vals << std::endl;
+        streams[i] << "20, " << vals * 400 << std::endl;
 
         infile6 >> buffer;
         vals = stod(buffer);
-        streams[i] << "32, " << vals << std::endl;
+        streams[i] << "32, " << vals * 1024 << std::endl;
     }
 
 }
