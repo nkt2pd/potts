@@ -1,0 +1,2 @@
+/var/spool/slurm/slurmd/job47951269/slurm_script: line 13: syntax error near unexpected token `('
+/var/spool/slurm/slurmd/job47951269/slurm_script: line 13: `L = (4 8 12 16 20 32 48 72)'
