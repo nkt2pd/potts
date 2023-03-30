@@ -14,8 +14,8 @@ plot "t=1.05_m.vs.L_fss.dat" using 1:2 with lp pt 1 lc rgb "black" title "t = 1.
      "t=0.65_m.vs.L_fss.dat" using 1:2 with lp pt 7 lc rgb "black" title "t = 0.65", \
      "t=0.55_m.vs.L_fss.dat" using 1:2 with lp pt 8 lc rgb "black" title "t = 0.55"
 
-set terminal png
-set output "L vs. T FSS"
+set term png
+set output "Lvs.T_FSS.png"
 replot
 unset output
-set terminal win
+set term qt
