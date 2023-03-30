@@ -1,0 +1,7 @@
+slurmstepd: error: *** JOB 47951747 ON udc-ba26-16 CANCELLED AT 2023-03-29T20:20:03 ***
+slurmstepd: error: _cgroup_procs_check: failed on path /sys/fs/cgroup/cpuacct/slurm/uid_2894563/job_47951747/step_batch/cgroup.procs: No such file or directory
+slurmstepd: error: unable to read '/sys/fs/cgroup/cpuacct/slurm/uid_2894563/job_47951747/step_batch/cgroup.procs'
+slurmstepd: error: _cgroup_procs_check: failed on path /sys/fs/cgroup/cpuset/slurm/uid_2894563/job_47951747/step_batch/cgroup.procs: No such file or directory
+slurmstepd: error: unable to read '/sys/fs/cgroup/cpuset/slurm/uid_2894563/job_47951747/step_batch/cgroup.procs'
+slurmstepd: error: _cgroup_procs_check: failed on path /sys/fs/cgroup/memory/slurm/uid_2894563/job_47951747/step_batch/cgroup.procs: No such file or directory
+slurmstepd: error: unable to read '/sys/fs/cgroup/memory/slurm/uid_2894563/job_47951747/step_batch/cgroup.procs'
