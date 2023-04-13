@@ -3,7 +3,8 @@ set yrange [.4:1]
 set logscale x
 set logscale y
 set key outside
-#slop for t = 0.1 is .0640909524, coeff is 0.9910369149
+#slope for t = 0.7 is .0640909524, coeff is 0.9910369149
+#slope for t = 0.9 is .117809973,  coeff is 0.999684505
 f(x) = 0.9910369149/(x**(.0640909524))
 g(x) = 0.999684505/(x**(.117809973))
 
